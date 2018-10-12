@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}CCPS530-Flashie - Internal Server Error{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>500 - Internal Server Error</h1>
+    <h2>Am I lost, friend?</h2>
+    <p>The local date and time is {{ moment(current_time).format('LLL') }}.</p>
+	<p>That was {{ moment(current_time).fromNow(refresh=True) }}.</p>
+</div>
+
+{% endblock %}

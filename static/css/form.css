@@ -1,0 +1,11 @@
+form {
+  margin: 0 auto;
+  padding-top: 50px;
+  padding-right: 50%;
+  padding-bottom: 50px;
+  padding-left: 80px;
+}
+
+.navbar {
+  background-color: #2f0727;
+}

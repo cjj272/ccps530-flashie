@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}CCPS530-Flashie - Page Not Found{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>404 - Not Found</h1>
+    <h2>Are you lost, friend?</h2>
+</div>
+<p>The local date and time is {{ moment(current_time).format('LLL') }}.</p>
+<p>That was {{ moment(current_time).fromNow(refresh=True) }}.</p>
+{% endblock %}

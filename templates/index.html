@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}CCPS530-Flashie - Home{% endblock %}
+
+{% block scripts %}
+  <link rel="stylesheet" href="/static/css/form.css">
+{{ super() }}
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="/static/js/autocomplete.js"></script>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.css" rel="stylesheet"/>
+{% endblock %}
+
+
+
+{% block page_content %}
+<div class="page-header">
+    <h1>{% if comp %}You picked {{ comp }}{% else %}Please select a company{% endif %}!</h1>
+</div>
+{{ wtf.quick_form(form) }}
+<h1></h1>
+<p>The local date and time is {{ moment(current_time).format('LLL') }}.</p>
+<p>That was {{ moment(current_time).fromNow(refresh=True) }}.</p>
+{% endblock %}
