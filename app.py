@@ -60,7 +60,6 @@ def index():
 	form=CompForm()
 	if form.validate_on_submit():
 		session['name']=form.name.data
-		#session['platform']=form.platform.data
 
 		#check if user exists
 		exists = SummonerToAccountID.query.filter(SummonerToAccountID.name.ilike("%"+form.name.data+"%")).first() is not None
