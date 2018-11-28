@@ -2,10 +2,14 @@
 
 {% block title %}CCPS530-Flashie{% endblock %}
 
+
+
 {% block head %}
 {{ super() }}
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<script src="/static/js/jquery.min.js" type="text/javascript"></script>
+
 {% endblock %}
 
 {% block navbar %}
@@ -23,6 +27,14 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/">Home</a></li>
+                <li><a href="{{ url_for('setupgroup') }}">Setup group</a></li>
+                <li><a href="{{ url_for('adduser') }}">Add user</a></li>
+                <li><a href="{{ url_for('matchdata') }}">Match data</a></li>
+                <li><a href="{{ url_for('gamedata') }}">Game data</a></li>
+                <li><a href="{{ url_for('imageupload') }}">Upload avatars</a></li>
+                <li><a href="{{ url_for('chooseavatar') }}">Choose avatars</a></li>
+                <li><a href="{{ url_for('chart') }}">Chart</a></li>
+                
             </ul>
         </div>
     </div>
@@ -48,5 +60,6 @@
 
 {% block scripts %}
 {{ super() }}
+
 {{ moment.include_moment() }}
 {% endblock %}

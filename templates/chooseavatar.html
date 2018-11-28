@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}CCPS530-Flashie - Home{% endblock %}
+
+{% block scripts %}
+<!– "<link rel="stylesheet" href="/static/css/form.css">
+<link rel="stylesheet" href="/static/css/jquery.flipster.min.css">
+
+{{ super() }}
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.css" rel="stylesheet"/>
+
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+<script src="/static/js/jquery.flipster.js"></script>
+
+
+{% endblock %}
+
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Choose avatar</h1>
+</div>
+<div class="panel panel-primary">
+    <article id="demo-default" class="demo">
+
+    
+        <div id="coverflow">
+            <ul class="flip-items">
+                {% for item in imageurls %}
+                    <li>
+                        <img height=200 length=200 src="/static/uploads/{{ item }}">
+                    </li>
+                {% endfor %}
+                <li data-flip-title="Red">
+                    <img height=200 length=200 src="/static/img/1.jpg">
+                </li>
+
+            </ul>
+        </div>
+    
+    <script>
+        var coverflow = $("#coverflow").flipster();
+    </script>
+
+    <script>
+    $(document).ready(function(){
+        $("button").click(function(){
+            var index = $('.flipster__item--current').index();
+            console.log($('.flipster__item--current'))
+            var name = $("#avatarname").val();
+
+            var data = {
+                index : index,
+                name : name
+            }
+            $.ajax({
+            type: "POST",
+            url: "/setavatar",
+            contentType: "application/json",
+
+            data: JSON.stringify(data),
+            success: function(data) {
+                $("#index").text('Successfully Changed Avatar');
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                $("#index").text('something went wrong?');
+            }
+        });
+
+            
+            //.index());
+            //$('.flipster__item--current').index().submit();
+        });
+    });</script>
+    
+    
+    </article>
+</div>
+
+<div class ="container">
+        <div class="form-group">
+        <select id="avatarname">
+            {% for item in names %}
+            <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+        </select>
+        <button type="button" class="btn">Change</button>
+        <p id="index"></p>   
+        </div> 
+    </div>
+<h1></h1>
+<p>The local date and time is {{ moment(current_time).format('LLL') }}.</p>
+<p>That was {{ moment(current_time).fromNow(refresh=True) }}.</p>
+{% endblock %}
