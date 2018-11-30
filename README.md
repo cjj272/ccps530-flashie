@@ -113,7 +113,7 @@ If all went well, you should be able to run the server!
 
 
 
-### Flashie usage
+## Flashie usage
 
 Now that the server is running, you can begin using the tool!
 
