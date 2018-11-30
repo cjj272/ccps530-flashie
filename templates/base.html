@@ -16,29 +16,35 @@
 <div class="navbar navbar-inverse" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+
             <a class="navbar-brand" href="/">CCPS530-Flashie</a>
         </div>
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav mr-auto">
                 <li><a href="/">Home</a></li>
-                <li><a href="{{ url_for('setupgroup') }}">Setup group</a></li>
-                <li><a href="{{ url_for('adduser') }}">Add user</a></li>
-                <li><a href="{{ url_for('matchdata') }}">Match data</a></li>
-                <li><a href="{{ url_for('gamedata') }}">Game data</a></li>
-                <li><a href="{{ url_for('imageupload') }}">Upload avatars</a></li>
-                <li><a href="{{ url_for('chooseavatar') }}">Choose avatars</a></li>
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Player Setup<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('setupgroup') }}">Setup group</a></li>
+                    <li><a href="{{ url_for('adduser') }}">Add user</a></li>
+                    <li><a href="{{ url_for('matchdata') }}">Match data</a></li>
+                    <li><a href="{{ url_for('gamedata') }}">Game data</a></li>
+                </ul>
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Avatar Settings<span class="caret"></span></a>
+                <ul class="dropdown-menu">           
+                    <li><a href="{{ url_for('imageupload') }}">Upload avatars</a></li>
+                    <li><a href="{{ url_for('chooseavatar') }}">Choose avatars</a></li>
+                </ul>
                 <li><a href="{{ url_for('chart') }}">Chart</a></li>
+
                 
             </ul>
         </div>
+
     </div>
 </div>
+
+
+
 {% endblock %}
 
 {% block content %}

@@ -8,6 +8,32 @@
 
 <script src='static/js/Chart.min.js'></script>
 
+
+<style>
+.row.vdivide [class*='col-']:not(:last-child):after {
+  background: #e0e0e0;
+  width: 1px;
+  content: "";
+  display:block;
+  position: absolute;
+  top:0;
+  bottom: 0;
+  right: 0;
+  min-height: 70px;
+}
+
+img {
+    object-fit: cover;
+    border: 2px solid #000;
+}
+
+</style>
+
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();   
+    });
+</script>
 <script>
   // Global parameters:
   // do not resize the chart canvas when its container does (keep at 600x400px)
@@ -119,7 +145,6 @@
 
   // define the chart data
   var gpmcdata = {
-    label: 'gold per minute',
     labels: [{% for item in labels %}
   "{{item}}",
     {% endfor %}],
@@ -142,7 +167,6 @@
   datasets: [{
     //label: '{{ legend }}',
     fill: true,
-
     lineTension: 0.1,
     backgroundColor: "#e1b12c",
     borderColor: "rgba(75,192,192,1)",
@@ -191,11 +215,21 @@
   var myChart = new Chart(ctx, {
     type: 'line',
     data: killData,
+    options: {
+      legend: {
+        display: false
+      }
+    }
   });
 
   var myChart2 = new Chart(ctx2, {
     type: 'bar',
     data: deathData,
+    options: {
+      legend: {
+        display: false
+      }
+    }
   });
 
   var myChart3 = new Chart(winscanvas, {
@@ -219,6 +253,11 @@
   var gpmChart = new Chart(gpmc, {
     type: 'bar',
     data: gpmcdata,
+    options: {
+      legend: {
+        display: false
+      }
+    }
   });
 
 
@@ -231,16 +270,61 @@
 
 
 <!-- bar chart canvas element -->
+
+<div class="container col-lg-12"><br><br></div>
+<div class="container-fluid">
+<div class="row" style="margin-bottom: 15px;">
+    <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1" >
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                  <span class="border border-dark">
+                  <img src="/static/uploads/{{ avatarimg }}" style="width: 200px; height: 200px;" class="img-rounded"/>
+                  </span>
+                </div>
+                    <div class="container-fluid col-lg-6 col-md-6 col-sm-6">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <h2>{{ sname }}</h2>
+                                <h4>Group: {{ groupinfo[0][0] }}</h4>
+                                <h4><a href="#" data-toggle="popover" data-content="{{ groupinfo[0][1] }}">Group Info</a></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- /.container -->
+
 <div class="container">
-  <div class ="row">
-        <div class="col-xs-4 col-sm-1">
-          <img src="/static/uploads/{{ avatarimg }}" alt="Profile Picture" class="img-responsive img-rounded" style="max-height: 100px; max-width: 100px;">
+  <div class="row">
+      <div class="col-md-12 col-sm-12">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+          </div>
+          <div class="panel-body">
+            <h1 class = "display-3"></h1>
+            <h1 class = "display-3"></h1>
+            <h1 class = "display-3"></h1>
+            <div class="row vdivide">
+                <div class="col-sm-4 text-center"><h4>{{ kda }} KDA</h4></div>
+                <div class="col-sm-4 text-center"><h4>Lane: {{ lanepref }}</h4></div>
+                <div class="col-sm-4 text-center"><h4>Role: {{ rolepref }}</h4></div>
+            </div>
+          </div>
         </div>
-        <div class="col-xs-1 col-sm-1">
+      </div>
+      <div class="col-md-12 col-sm-12">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            Combined KD
+          </div>
+          <div class="panel-body">
+            <canvas id="myChart4" width="800" height="450"></canvas>
+          </div>
         </div>
-        <div class="col-xs-9 col-sm-10">
-            <h1 class="display-1">Simple Chart <small>small</small></h1>
-        </div>
+      </div>
   </div>
   <div class="row">
     <div class="col-md-6 col-sm-6">
@@ -256,7 +340,7 @@
     <div class="col-md-6 col-sm-6">
       <div class="panel panel-success ">
         <div class="panel-heading">
-          Kill bar chart
+          Death bar chart
         </div>
         <div class="panel-body">
           <canvas id="myChart2" width="800" height="450"></canvas>
@@ -283,28 +367,6 @@
         </div>
         <div class="panel-body">
           <canvas id="gpmChart" width="800" height="450"></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6 col-sm-6">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-        KDA
-        </div>
-        <div class="panel-body">
-          <h1 class = "display-3">{{ kda }} KDA</h1>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-sm-6">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          Combined KD
-        </div>
-        <div class="panel-body">
-          <canvas id="myChart4" width="800" height="450"></canvas>
         </div>
       </div>
     </div>

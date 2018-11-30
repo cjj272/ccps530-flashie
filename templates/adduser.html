@@ -4,7 +4,6 @@
 {% block title %}CCPS530-Flashie - Home{% endblock %}
 
 {% block scripts %}
-<!– "<link rel="stylesheet" href="/static/css/form.css">
 
 {{ super() }}
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -15,10 +14,40 @@
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Add user</h1>
+    <h1>Add user </h1>
+    <div class="float-right">
+        <button type="button" class="btn btn-info float-xl-right" data-toggle="modal" data-target="#exampleModal">
+            Need help? click here!
+        </button>
+    </div>
 </div>
+
+<!--Modal-->
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title" id="exampleModalLabel">Adding a user.</h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              To add a user, simply input their League of Legends Summoner name into the form below.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+</div>
+
+
 <div class="panel panel-primary">
-    <div class="panel-heading">Panel with panel-primary class</div>
+    <div class="panel-heading"></div>
     <div class="panel-body">{{ wtf.quick_form(form) }}</div>
 </div>
 

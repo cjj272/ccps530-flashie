@@ -15,10 +15,38 @@
 {% block page_content %}
 <div class="page-header">
     <h1>Match data</h1>
+    <div class="float-right">
+            <button type="button" class="btn btn-info float-xl-right" data-toggle="modal" data-target="#exampleModal">
+                Need help? click here!
+            </button>
+    </div>
 </div>
 <h1></h1>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title" id="exampleModalLabel">Getting match data.</h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Simply select the user and submit the form. <br>
+              Note: This is the preliminary data needed to get game stats. <br>
+              You will need to submit this form <b>before</b> fetching game data.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+</div>
+
 <div class="panel panel-primary">
-    <div class="panel-heading">Panel with panel-primary class</div>
+    <div class="panel-heading"></div>
     <div class="panel-body">{{ wtf.quick_form(form) }}</div>
 </div>
 

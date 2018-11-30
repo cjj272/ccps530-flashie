@@ -10,13 +10,18 @@
 {{ super() }}
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <link href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.css" rel="stylesheet"/>
-
+  <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/css/bootstrap-select.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/js/bootstrap-select.min.js"></script>
 {% endblock %}
 
 {% block head %}
 {{ super() }}
 <script src="/static/js/jquery.flipster.js"></script>
-
+<script>
+$(document).ready(function(e) {
+  $('.selectpicker').selectpicker();
+});
+</script>
 
 {% endblock %}
 
@@ -24,6 +29,34 @@
 {% block page_content %}
 <div class="page-header">
     <h1>Choose avatar</h1>
+    <div class="float-right">
+            <button type="button" class="btn btn-info float-xl-right" data-toggle="modal" data-target="#exampleModal">
+                Need help? click here!
+            </button>
+    </div>
+</div>
+<!--Modal-->
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title" id="exampleModalLabel">Choosing an avatar.</h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              To choose an avatar, simply pick an image from the carousel, select a user in the bottom, and click change!<br>
+              If you do need see any images in the carousel, add some!
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
 </div>
 <div class="panel panel-primary">
     <article id="demo-default" class="demo">
@@ -36,9 +69,6 @@
                         <img height=200 length=200 src="/static/uploads/{{ item }}">
                     </li>
                 {% endfor %}
-                <li data-flip-title="Red">
-                    <img height=200 length=200 src="/static/img/1.jpg">
-                </li>
 
             </ul>
         </div>
@@ -49,7 +79,7 @@
 
     <script>
     $(document).ready(function(){
-        $("button").click(function(){
+        $("#change").click(function(){
             var index = $('.flipster__item--current').index();
             console.log($('.flipster__item--current'))
             var name = $("#avatarname").val();
@@ -84,16 +114,17 @@
 
 <div class ="container">
         <div class="form-group">
-        <select id="avatarname">
+        <select class="selectpicker" id="avatarname">
             {% for item in names %}
             <option value="{{ item }}">{{ item }}</option>
             {% endfor %}
         </select>
-        <button type="button" class="btn">Change</button>
+        <button id="change" type="button" class="btn">Change</button>
         <p id="index"></p>   
         </div> 
     </div>
 <h1></h1>
+      
 <p>The local date and time is {{ moment(current_time).format('LLL') }}.</p>
 <p>That was {{ moment(current_time).fromNow(refresh=True) }}.</p>
 {% endblock %}

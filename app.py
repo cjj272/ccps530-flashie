@@ -2,6 +2,8 @@ import os
 import requests
 import sys
 import uuid
+import itertools
+import operator
 from datetime import datetime
 from flask import Flask, render_template, json,jsonify,redirect, url_for, session, flash,Markup,request
 from flask_bootstrap import Bootstrap,WebCDN
@@ -29,7 +31,7 @@ class SummonerToAccountID(db.Model):
     __tablename__ = 'sumtoacc'
     name = db.Column(db.String(64), primary_key=True)
     accountid = db.Column(db.Integer, index=True)
-    gid = db.Column(db.Integer, index=True)
+    gid = db.Column(db.Integer,  db.ForeignKey('groups.gid'),index=True)
 
 
 
@@ -56,6 +58,7 @@ class Groups(db.Model):
     gid = db.Column(db.Integer, primary_key=True)
     gname = db.Column(db.String(100))
     gdesc = db.Column(db.String(100))
+    ati = db.relationship('SummonerToAccountID',backref='index', uselist=False)
 
 
 
@@ -391,7 +394,7 @@ def setupgroup():
         db.session.add(group)
         db.session.commit()
 
-        flash('Success?', 'success')
+        flash('Success', 'success')
 
         return redirect(url_for('setupgroup'))
     return render_template('setupgroup.html', current_time=datetime.utcnow(), form=form, name=session.get('name'),
@@ -423,7 +426,7 @@ def matchdata():
 
         db.session.commit()
 
-        flash('Success?', 'success')
+        flash('Success', 'success')
 
         return redirect(url_for('matchdata'))
     return render_template('matchdata.html', form=form, current_time=datetime.utcnow())
@@ -455,7 +458,7 @@ def adduser():
         db.session.add(user)
         db.session.commit()
 
-        flash('Success?', 'success')
+        flash('Success', 'success')
 
         return redirect(url_for('adduser'))
     return render_template('adduser.html', current_time=datetime.utcnow(), form=form, name=session.get('name'),
@@ -508,7 +511,7 @@ def gamedata():
 
         db.session.commit()
 
-        flash('Success?', 'success')
+        flash('Success', 'success')
 
         return redirect(url_for('gamedata'))
     return render_template('gamedata.html', form=form, current_time=datetime.utcnow())
@@ -519,13 +522,34 @@ def chart():
     form = ChartNameForm()
     if form.validate_on_submit():
         accountid=form.sname._data.accountid
-        kills = GameData.query.with_entities(GameData.gameId,GameData.kills).filter(GameData.accountid).order_by(GameData.gameId.desc()).limit(20).all()
-        deaths = GameData.query.with_entities(GameData.gameId,GameData.deaths).filter(GameData.accountid).order_by(GameData.gameId.desc()).limit(20).all()        
+        sname = form.sname.raw_data[0]
+
+        if (GameData.query.filter(GameData.accountid==accountid).count() == 0):
+            flash('No games found. Please get game data or find a player who has played recently', 'danger')
+            return render_template("playerchart.html",form=form,current_time=datetime.utcnow()) 
+
+
+        groupinfo = Groups.query.join(SummonerToAccountID).filter(SummonerToAccountID.accountid==accountid).with_entities(Groups.gname,Groups.gdesc).all()
+
+        lanepref=MatchData.query.with_entities(MatchData.lane).filter(MatchData.accountid==accountid).order_by(MatchData.gameId.desc()).limit(20).all()
+        lanepref=most_common(lanepref)[0]
+        lanepref = interpretlane(lanepref)
+
+        print (groupinfo)
+
+        rolepref=MatchData.query.with_entities(MatchData.role).filter(MatchData.accountid==accountid).order_by(MatchData.gameId.desc()).limit(20).all()
+        rolepref=most_common(rolepref)[0]
+        print (rolepref)
+        rolepref=interpretrole(rolepref)
+
+
+        kills = GameData.query.with_entities(GameData.gameId,GameData.kills).filter(GameData.accountid == accountid).order_by(GameData.gameId.desc()).limit(20).all()
+        deaths = GameData.query.with_entities(GameData.gameId,GameData.deaths).filter(GameData.accountid == accountid).order_by(GameData.gameId.desc()).limit(20).all()        
         winquery = WinList.query.with_entities(WinList.win).filter(WinList.accountid==accountid).order_by(WinList.gameId.desc()).limit(20).all()
         wins = winquery.count((True,))
         losses = winquery.count((False,))
-        gpm=GameData.query.with_entities(GameData.goldEarned,GameData.gameDuration).all()
-        kda=round((GameData.query.with_entities(func.sum(GameData.kills)).filter(GameData.accountid).scalar()+GameData.query.with_entities(func.sum(GameData.assists)).filter(GameData.accountid).scalar())/GameData.query.with_entities(func.sum(GameData.deaths)).filter(GameData.accountid).scalar(),2)
+        gpm=GameData.query.with_entities(GameData.goldEarned,GameData.gameDuration).filter(GameData.accountid == accountid).order_by(GameData.gameId.desc()).limit(20).all()
+        kda=round((GameData.query.with_entities(func.sum(GameData.kills)).filter(GameData.accountid == accountid).scalar()+GameData.query.with_entities(func.sum(GameData.assists)).filter(GameData.accountid).scalar())/GameData.query.with_entities(func.sum(GameData.deaths)).filter(GameData.accountid).scalar(),2)
         gpmdata = [round((i/(j/60))) for (i,j) in gpm]
         winpercent = str(round((wins/(wins+losses) * 100),2)) 
 
@@ -537,11 +561,46 @@ def chart():
         killsvalues = [j for (i,j) in kills]
         deathsvalues = [j for (i,j) in deaths]
         labels = [(x+1) for x in range(0,20)]
-        return render_template('chart.html', labels=labels,form=form,avatarimg=avatarimg,killsvalues=killsvalues,deathsvalues=deathsvalues, kda=kda,gpmdata=gpmdata,wins=wins,losses=losses,winpercent=winpercent,current_time=datetime.utcnow())
+        return render_template('chart.html', labels=labels,form=form,sname=sname,groupinfo=groupinfo,lanepref=lanepref,rolepref=rolepref,avatarimg=avatarimg,killsvalues=killsvalues,deathsvalues=deathsvalues, kda=kda,gpmdata=gpmdata,wins=wins,losses=losses,winpercent=winpercent,current_time=datetime.utcnow())
     elif request.method == 'GET':
         return render_template("playerchart.html",form=form,current_time=datetime.utcnow()) 
     #return render_template('chart.html', values=values, form=form,labels=labels, kda=kda,gpmdata=gpmdata,wins=wins,losses=losses,winpercent=winpercent,legend=legend,current_time=datetime.utcnow())
 
+def most_common(L):
+  # get an iterable of (item, iterable) pairs
+  SL = sorted((x, i) for i, x in enumerate(L))
+  # print 'SL:', SL
+  groups = itertools.groupby(SL, key=operator.itemgetter(0))
+  # auxiliary function to get "quality" for an item
+  def _auxfun(g):
+    item, iterable = g
+    count = 0
+    min_index = len(L)
+    for _, where in iterable:
+      count += 1
+      min_index = min(min_index, where)
+    # print 'item %r, count %r, minind %r' % (item, count, min_index)
+    return count, -min_index
+  # pick the highest-count/earliest item
+  return max(groups, key=_auxfun)[0]
+
+def interpretrole(input):
+    dic={}
+    dic['DUO_CARRY'] = "Duo carry role"
+    dic['SOLO'] = "Solo role"
+    dic['NONE'] = "Flex role"
+    dic['DUO_SUPPORT'] = "Support role"
+    dic['DUO'] = 'Flex role'
+    return dic[input]
+
+def interpretlane(input):
+    dic={}
+    dic['BOTTOM'] = "Bottom lane"
+    dic['TOP'] = "Top lane"
+    dic['JUNGLE'] = "Jungle lane"
+    dic['MID'] = "Mid lane"
+    dic['NONE'] = "Flex lane"
+    return dic[input]
 
 
 
@@ -587,6 +646,9 @@ def setavatar():
 
 def indextofilename(x):
     imageurls = os.listdir("static/uploads")
+    print (imageurls)
+    print (len(imageurls))
+    print (x)
     return imageurls[x]
 
 
