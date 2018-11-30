@@ -171,3 +171,6 @@ If you'd like, you can set avatar images to be displayed for each user. After na
 
 And finally, the payoff for all this setup. Choose the summoner **who has successfully loaded game data** and click submit.
 
+![s6](C:\Users\cjcjw10\Google Drive\School\ccps530\gitimages\s6.png)
+
+![s7](C:\Users\cjcjw10\Google Drive\School\ccps530\gitimages\s7.png)
