@@ -24,7 +24,7 @@ Flashie is a tool designed to help provide gameplay insights to League of Legend
 
 ## Steps
 
-###Initial Setup
+### Initial Setup
 
 #### 1. Clone the repo
 
@@ -37,13 +37,13 @@ $ cd ccps530-flashie
 
 
 
-####2. Get a Riot API key
+#### 2. Get a Riot API key
 
 You will need to get your own API key from Riot. [Instructions here.](https://developer.riotgames.com/api-keys.html)
 
 
 
-####3. Provide a config file
+#### 3. Provide a config file
 
 Once you have an API key, create a config.py file and supply it with the following information:
 
@@ -85,7 +85,7 @@ From there, you can install the requirements:
 
 
 
-####5. Create databases
+#### 5. Create databases
 
 Then, you will need to create the databases that Flashie will use. In order to do so, log into the root directory of the project and perform the following:
 
