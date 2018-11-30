@@ -125,7 +125,7 @@ Our first step will be to add League of Legends accounts to the tool. You can do
 
 
 
-![s1](C:\Users\cjcjw10\Google Drive\School\ccps530\gitimages\s1.PNG)
+![s1](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s1.PNG)
 
 Simply add a user and click submit. This will submit an API call to the Riot servers to make sure that the account exists. 
 
