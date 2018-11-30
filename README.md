@@ -147,7 +147,7 @@ Hit submit for the summoner name you have selected. Another API call will be sen
 
 *After* you have grabbed match data for a player, you can now navigate to the "Game data" page in order to get player specific info for the relevant matches. 
 
-![s3](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s3.PNG)
+![s3](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s3.png)
 
 Again, simply select the summoner name you are interested in and click submit. 
 
@@ -159,18 +159,18 @@ Again, simply select the summoner name you are interested in and click submit.
 
 If you'd like, you can also upload images to be displayed for each user. After navigating to the "Upload avatars" section, simply drag and drop images and click upload!
 
-![s4](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s4.PNG)
+![s4](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s4.png)
 
 
 
 #### 5. (Optional) Set avatars
 
-If you'd like, you can set avatar images to be displayed for each user. After navigating to the "Choose avatar" section, simply drag and drop images and click upload!![s5](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s5.PNG)
+If you'd like, you can set avatar images to be displayed for each user. After navigating to the "Choose avatar" section, simply drag and drop images and click upload!![s5](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s5.png)
 
 #### 6. See performance charts
 
 And finally, the payoff for all this setup. Choose the summoner **who has successfully loaded game data** and click submit.
 
-![s6](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s6.PNG)
+![s6](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s6.png)
 
-![s7](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s7.PNG)
+![s7](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s7.png)
