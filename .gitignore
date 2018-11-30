@@ -1,4 +1,3 @@
-config.py
 pytest.py
 data.sqlite
 /static/uploads/*
@@ -28,3 +27,7 @@ htmlcov/
 *,cover
 __pycache__/*
 __pycache__/
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

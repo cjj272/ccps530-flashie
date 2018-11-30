@@ -17,7 +17,9 @@ from flask_sqlalchemy import SQLAlchemy
 
 from pprint import pprint
 
-app = Flask(__name__)
+application = Flask(__name__)
+app=application
+
 
 app.config.from_object('config.Config')
 db = SQLAlchemy(app)
@@ -25,6 +27,9 @@ bootstrap = Bootstrap(app)
 moment = Moment(app)
 
 app.extensions['bootstrap']['cdns']['jquery'] = WebCDN('//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/')
+
+RIOT_API_KEY = os.environ.get("RIOT_API_KEY")
+
 
 # db stuff
 class SummonerToAccountID(db.Model):
@@ -208,7 +213,7 @@ class GameData(db.Model):
 # riot stuff
 def GetSummonerInfo(accountName):
     r = requests.get('https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/' + accountName, headers={
-        "X-Riot-Token": "{}".format(app.config['RIOT_API_KEY']),
+        "X-Riot-Token": "{}".format(RIOT_API_KEY),
     })
 
     status_dict = {
@@ -239,7 +244,7 @@ def sumacc_query():
 
 def GetRecentMatches(accountID):
     r = requests.get('https://na1.api.riotgames.com/lol/match/v3/matchlists/by-account/' + str(accountID), headers={
-        "X-Riot-Token": app.config['RIOT_API_KEY'],
+        "X-Riot-Token": "{}".format(RIOT_API_KEY),
     })
 
     status_dict = {
@@ -264,7 +269,7 @@ def GetRecentMatches(accountID):
 
 def getGameData(playerID, gameID):
     r = requests.get('https://na1.api.riotgames.com/lol/match/v3/matches/' + str(gameID), headers={
-        "X-Riot-Token": app.config['RIOT_API_KEY'],
+        "X-Riot-Token": "{}".format(RIOT_API_KEY),
     })
 
     status_dict = {
@@ -435,7 +440,6 @@ def matchdata():
 @app.route('/adduser', methods=['GET', 'POST'])
 def adduser():
 
-    print(app.config['RIOT_API_KEY'])
 
     form = AddUserForm()
     if form.validate_on_submit():
