@@ -17,8 +17,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from pprint import pprint
 
-application = Flask(__name__)
-app=application
+app = Flask(__name__)
 
 
 app.config.from_object('config.Config')
