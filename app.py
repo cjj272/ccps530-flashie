@@ -20,12 +20,16 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
+
 app.config.from_object('config.Config')
 db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 
 app.extensions['bootstrap']['cdns']['jquery'] = WebCDN('//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/')
+
+RIOT_API_KEY = os.environ.get("RIOT_API_KEY")
+
 
 # db stuff
 class SummonerToAccountID(db.Model):
