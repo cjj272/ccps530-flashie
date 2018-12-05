@@ -413,13 +413,9 @@ def apikey():
 
         return redirect(url_for('apikey'))
     elif form2.validate_on_submit():
-        apikey = APIKey.query.first()
-        if apikey:
-            db.session.delete(apikey)
-            db.session.commit()
-            flash('Successfully removed API key', 'success')
-        else:
-            flash('API Key already removed or absent.', 'warning')
+        apikey = APIKey(id=1,key="deleted")
+        db.session.merge(apikey)
+        db.session.commit()
 
 
         return redirect(url_for('apikey'))
