@@ -13,34 +13,32 @@
 
 
 {% block page_content %}
-<div class="container">
-
-<div class=row>
 <div class="page-header">
-    <h1>Add/Remove User </h1>
+    <h1>Setup API key </h1>
     <div class="float-right">
         <button type="button" class="btn btn-info float-xl-right" data-toggle="modal" data-target="#exampleModal">
             Need help? click here!
         </button>
     </div>
 </div>
-</div>
+
 <!--Modal-->
 
-<div class=row>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 class="modal-title" id="exampleModalLabel">Adding a user.</h2>
+              <h2 class="modal-title" id="exampleModalLabel">API key.</h2>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              To add a user, simply input their League of Legends Summoner name into the form below.
+              To add your API key, place your key into the form below.<br>
+              If you don't have a key, please visit <a href="https://developer.riotgames.com/api-keys.html">the riot developer page</a><br>
+              To remove your API key, click submit in the remove form.
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -48,22 +46,22 @@
           </div>
         </div>
 </div>
-</div>
+
 
 <div class="panel panel-primary">
-    <div class="panel-heading">Add user</div>
-    <div class="panel-body">{{ wtf.quick_form(form) }}</div>
-</div>
-<div class="panel panel-danger">
-  <div class="panel-heading">Remove user</div>
-  <div class="panel-body">{{ wtf.quick_form(form2) }}</div>
-</div>
+    <div class="panel-heading">Input API Key</div>
+    <div class="panel-body">
+      <h4>Do not share your API Key with anyone!</h4>
+      {{ wtf.quick_form(form) }}</div>
 </div>
 
+<div class="panel panel-danger">
+    <div class="panel-heading">Remove API Key</div>
+    <div class="panel-body">
+      {{ wtf.quick_form(form2) }}</div>
+</div>
 
 <h1></h1>
 <p>The local date and time is {{ moment(current_time).format('LLL') }}.</p>
 <p>That was {{ moment(current_time).fromNow(refresh=True) }}.</p>
-
-
 {% endblock %}

@@ -315,13 +315,26 @@ img {
           </div>
         </div>
       </div>
-      <div class="col-md-12 col-sm-12">
+  </div>
+  <div class="row">
+      <div class="col-md-6 col-sm-6">
         <div class="panel panel-info">
           <div class="panel-heading">
-            Combined KD
+            Win ratio
           </div>
           <div class="panel-body">
-            <canvas id="myChart4" width="800" height="450"></canvas>
+            <canvas id="myChart3" width="800" height="450"></canvas>
+            <h3 style="text-align: center">{{ wins }} wins, {{ losses }} losses</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-6">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            Gold per minute.
+          </div>
+          <div class="panel-body">
+            <canvas id="gpmChart" width="800" height="450"></canvas>
           </div>
         </div>
       </div>
@@ -349,27 +362,16 @@ img {
     </div>
   </div>
   <div class="row">
-    <div class="col-md-6 col-sm-6">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          Win ratio
-        </div>
-        <div class="panel-body">
-          <canvas id="myChart3" width="800" height="450"></canvas>
-          <h3 style="text-align: center">{{ wins }} wins, {{ losses }} losses</h3>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-sm-6">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          Gold per minute.
-        </div>
-        <div class="panel-body">
-          <canvas id="gpmChart" width="800" height="450"></canvas>
+    <div class="col-md-12 col-sm-12">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            Combined KD
+          </div>
+          <div class="panel-body">
+            <canvas id="myChart4" width="800" height="450"></canvas>
+          </div>
         </div>
       </div>
-    </div>
   </div>
 </div>
 {{ wtf.quick_form(form) }}

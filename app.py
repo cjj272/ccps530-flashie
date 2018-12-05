@@ -15,7 +15,8 @@ from wtforms.validators import DataRequired, Required, Length
 from sqlalchemy import func
 from flask_sqlalchemy import SQLAlchemy
 
-from pprint import pprint
+
+
 
 app = Flask(__name__)
 
@@ -34,23 +35,19 @@ class SummonerToAccountID(db.Model):
     gid = db.Column(db.Integer,  db.ForeignKey('groups.gid'),index=True)
 
 
-
-'''
-Replaced with an easier implementation
-class AvatarToImage(db.Model):
-    aid = db.Column(db.Integer, primary_key=True)
-    afn = db.Column(db.String(128), index=True)
-    ati = db.relationship('NameToAvatar',backref='index', uselist=False)
-
-class NameToAvatar(db.Model):
-    name = db.Column(db.String(64), primary_key=True)
-    ai = db.Column(db.Integer, db.ForeignKey('avatar_to_image.aid'))
-'''
-
 class NameToAvatarFN(db.Model):
     name = db.Column(db.String(64), primary_key=True)
     afn = db.Column(db.String(128))
 
+
+    def __repr__(self):
+        return '%d' % self.name
+
+
+class APIKey(db.Model):
+    __tablename__ = 'apikey'
+    id = db.Column(db.Integer,primary_key=True)
+    key = db.Column(db.String(100))
 
 
 class Groups(db.Model):
@@ -207,8 +204,11 @@ class GameData(db.Model):
 
 # riot stuff
 def GetSummonerInfo(accountName):
+
+    riotapi = APIKey.query.first().key
+
     r = requests.get('https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/' + accountName, headers={
-        "X-Riot-Token": "{}".format(app.config['RIOT_API_KEY']),
+        "X-Riot-Token": "{}".format(riotapi),
     })
 
     status_dict = {
@@ -238,8 +238,11 @@ def sumacc_query():
 
 
 def GetRecentMatches(accountID):
+    
+    riotapi = APIKey.query.first().key
+
     r = requests.get('https://na1.api.riotgames.com/lol/match/v3/matchlists/by-account/' + str(accountID), headers={
-        "X-Riot-Token": app.config['RIOT_API_KEY'],
+        "X-Riot-Token": "{}".format(riotapi),
     })
 
     status_dict = {
@@ -258,13 +261,15 @@ def GetRecentMatches(accountID):
 
     if r.status_code in status_dict:
         return r.status_code, status_dict[r.status_code]
-    # print(r.json().get('matches'))
     return r.status_code, r.json().get('matches')
 
 
 def getGameData(playerID, gameID):
+    
+    riotapi = APIKey.query.first().key
+
     r = requests.get('https://na1.api.riotgames.com/lol/match/v3/matches/' + str(gameID), headers={
-        "X-Riot-Token": app.config['RIOT_API_KEY'],
+        "X-Riot-Token": "{}".format(riotapi),
     })
 
     status_dict = {
@@ -284,7 +289,6 @@ def getGameData(playerID, gameID):
     if r.status_code in status_dict:
         return r.status_code, status_dict[r.status_code]
 
-    pprint (r)
     d = r.json()
 
     teamdict={}
@@ -333,6 +337,10 @@ class AddUserForm(FlaskForm):
     gid = QuerySelectField(query_factory=choice_query, allow_blank=False, get_label='gname')
     submit = SubmitField('Submit')
 
+class RemoveUserForm(FlaskForm):
+    sname = QuerySelectField(query_factory=sumacc_query, allow_blank=False, get_label='name')
+    submit = SubmitField('Submit')
+
     
     def _repr_(self):
         return '<Choice {}>'.format(self.name)
@@ -364,7 +372,12 @@ class ChartNameForm(FlaskForm):
     sname = QuerySelectField(query_factory=sumacc_query, allow_blank=False, get_label='name')
     submit = SubmitField('Submit')
 
+class APIKeyForm(FlaskForm):
+    apikey = StringField('API Key', validators=[DataRequired(), Length(42, 50)])
+    submit = SubmitField('Submit')
 
+class RemoveAPIKeyForm(FlaskForm):
+    submit = SubmitField('Submit')
 
 
 # handle 404, 500
@@ -382,6 +395,31 @@ def internal_server_error(e):
 def index():
     return render_template('index.html', current_time=datetime.utcnow())
 
+
+@app.route('/apikey', methods=['GET','POST'])
+def apikey():
+    form = APIKeyForm()
+    form2 = RemoveAPIKeyForm()
+    if form.validate_on_submit():
+        apikey = APIKey(id=1,key=form.apikey.data)
+        db.session.merge(apikey)
+        db.session.commit()
+
+        flash('Successfully added API key', 'success')
+
+        return redirect(url_for('apikey'))
+    elif form2.validate_on_submit():
+        apikey = APIKey.query.first()
+        if apikey:
+            db.session.delete(apikey)
+            db.session.commit()
+            flash('Successfully removed API key', 'success')
+        else:
+            flash('API Key already removed or absent.', 'warning')
+
+
+        return redirect(url_for('apikey'))
+    return render_template('apikey.html',form=form,form2=form2,current_time=datetime.utcnow())
 
 @app.route('/setupgroup', methods=['GET', 'POST'])
 def setupgroup():
@@ -406,7 +444,6 @@ def matchdata():
     form = MatchDataForm()
     if form.validate_on_submit():
 
-        pprint(int(form.sname._data.accountid))
         info = GetRecentMatches(form.sname._data.accountid)
 
         if info[0] != 200:
@@ -435,9 +472,9 @@ def matchdata():
 @app.route('/adduser', methods=['GET', 'POST'])
 def adduser():
 
-    print(app.config['RIOT_API_KEY'])
 
     form = AddUserForm()
+    form2 = RemoveUserForm()
     if form.validate_on_submit():
         exists = SummonerToAccountID.query.filter(
             SummonerToAccountID.name.ilike("%" + form.name.data + "%")).first() is not None
@@ -448,12 +485,10 @@ def adduser():
         
         info = GetSummonerInfo(form.name.data)
 
-        print (info)
         if info[0] != 200 :
             flash("{} {}".format(info[0], info[1]), 'danger')
             return redirect(url_for('adduser'))
 
-        pprint ("{} {} {}".format( info[1], info[2], form.gid.raw_data[0]))
         user = SummonerToAccountID(name=info[1], accountid=info[2], gid=int(form.gid.raw_data[0]))
         db.session.add(user)
         db.session.commit()
@@ -461,7 +496,15 @@ def adduser():
         flash('Success', 'success')
 
         return redirect(url_for('adduser'))
-    return render_template('adduser.html', current_time=datetime.utcnow(), form=form, name=session.get('name'),
+    if form2.validate_on_submit():
+        user = SummonerToAccountID.query.filter_by(name=form2.sname.data.name).first()
+        db.session.delete(user)
+        db.session.commit()
+        return redirect(url_for('adduser'))
+
+
+
+    return render_template('adduser.html', current_time=datetime.utcnow(), form=form, form2=form2,name=session.get('name'),
                            platform=session.get('platform'))
 
 
@@ -470,27 +513,25 @@ def gamedata():
     form = GameDataForm()
     if form.validate_on_submit():
 
-        pprint(int(form.sname._data.accountid))
 
         games = getGameIDs(form.sname._data.accountid)
         if not games:
-            flash("{}".format("db failed"), 'danger')
+            flash("{}".format("No games found!"), 'danger')
+            return redirect(url_for('matchdata'))
+        elif len(games) != 20:
+            flash("{}".format("Could not find 20 recent games. Can not grab stats."), 'danger')
             return redirect(url_for('matchdata'))
 
-        #pprint(games)
         for game in games:
-            pprint(game)
             exists = GameData.query.filter(
                 GameData.gameId.ilike("%" + str(game) + "%")).first() is not None
 
             if not exists:
-                #pprint(game)
                 temp = getGameData(form.sname._data.accountid,game)
                 gamedata = temp[0]
                 win=temp[1]
 
                 if gamedata:
-                    #pprint(gamedata)
                     gamedata['accountid'] = form.sname._data.accountid
                     gamedata['gameId'] = game
 
@@ -501,7 +542,6 @@ def gamedata():
                     if "statPerk2" in gamedata:
                         del gamedata["statPerk2"]
 
-                    pprint (gamedata)
                     gameresult = GameData(**gamedata)
                     db.session.add(gameresult)
 
@@ -520,6 +560,12 @@ def gamedata():
 @app.route("/chart",methods=['GET', 'POST'])
 def chart():
     form = ChartNameForm()
+    if request.method=="POST":
+        if not form.validate_on_submit():
+            #flash ('No user specified.','danger')
+            return render_template("playerchart.html",form=form,current_time=datetime.utcnow()) 
+
+
     if form.validate_on_submit():
         accountid=form.sname._data.accountid
         sname = form.sname.raw_data[0]
@@ -535,11 +581,8 @@ def chart():
         lanepref=most_common(lanepref)[0]
         lanepref = interpretlane(lanepref)
 
-        print (groupinfo)
-
         rolepref=MatchData.query.with_entities(MatchData.role).filter(MatchData.accountid==accountid).order_by(MatchData.gameId.desc()).limit(20).all()
         rolepref=most_common(rolepref)[0]
-        print (rolepref)
         rolepref=interpretrole(rolepref)
 
 
@@ -549,12 +592,11 @@ def chart():
         wins = winquery.count((True,))
         losses = winquery.count((False,))
         gpm=GameData.query.with_entities(GameData.goldEarned,GameData.gameDuration).filter(GameData.accountid == accountid).order_by(GameData.gameId.desc()).limit(20).all()
-        kda=round((GameData.query.with_entities(func.sum(GameData.kills)).filter(GameData.accountid == accountid).scalar()+GameData.query.with_entities(func.sum(GameData.assists)).filter(GameData.accountid).scalar())/GameData.query.with_entities(func.sum(GameData.deaths)).filter(GameData.accountid).scalar(),2)
+        kda=round((GameData.query.with_entities(func.sum(GameData.kills)).filter(GameData.accountid == accountid).scalar()+GameData.query.with_entities(func.sum(GameData.assists)).filter(GameData.accountid == accountid).scalar())/GameData.query.with_entities(func.sum(GameData.deaths)).filter(GameData.accountid == accountid).scalar(),2)
         gpmdata = [round((i/(j/60))) for (i,j) in gpm]
-        winpercent = str(round((wins/(wins+losses) * 100),2)) 
+        winpercent = str(round((float(wins)/(wins+losses) * 100),2)) 
 
         avatarimg = NameToAvatarFN.query.with_entities(NameToAvatarFN.afn).filter(NameToAvatarFN.name==form.sname.raw_data[0]).first()
-        print (avatarimg)
         if avatarimg:
             avatarimg=avatarimg[0]
 
@@ -569,7 +611,6 @@ def chart():
 def most_common(L):
   # get an iterable of (item, iterable) pairs
   SL = sorted((x, i) for i, x in enumerate(L))
-  # print 'SL:', SL
   groups = itertools.groupby(SL, key=operator.itemgetter(0))
   # auxiliary function to get "quality" for an item
   def _auxfun(g):
@@ -579,7 +620,6 @@ def most_common(L):
     for _, where in iterable:
       count += 1
       min_index = min(min_index, where)
-    # print 'item %r, count %r, minind %r' % (item, count, min_index)
     return count, -min_index
   # pick the highest-count/earliest item
   return max(groups, key=_auxfun)[0]
@@ -604,7 +644,7 @@ def interpretlane(input):
 
 
 
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = './static/uploads'
 
 
 @app.route("/imageupload",methods=['GET','POST'])
@@ -614,7 +654,6 @@ def imageupload():
 @app.route("/upload",methods=['GET','POST'])
 def upload():
     if request.method == 'POST':
-        pprint ((request.files))
         file = request.files['file']
         extension = os.path.splitext(file.filename)[1]
         f_name = str(uuid.uuid4()) + extension
@@ -623,7 +662,7 @@ def upload():
 
 @app.route("/chooseavatar",methods=['GET','POST'])
 def chooseavatar():
-    imageurls = os.listdir("static/uploads")
+    imageurls = os.listdir("./static/uploads")
     namesquery = SummonerToAccountID.query.with_entities(SummonerToAccountID.name).all()
     names = [i for (i,) in namesquery]
 
@@ -634,9 +673,7 @@ def chooseavatar():
 @app.route("/setavatar",methods=['POST'])
 def setavatar():
     if request.method=='POST':
-        #pprint (vars(request))
         d = request.get_json()
-        print (d)
         addition = indextofilename(d['index'])
         query = NameToAvatarFN(name=d['name'],afn=addition)
         db.session.merge(query)
@@ -645,12 +682,9 @@ def setavatar():
 
 
 def indextofilename(x):
-    imageurls = os.listdir("static/uploads")
-    print (imageurls)
-    print (len(imageurls))
-    print (x)
+    imageurls = os.listdir("./static/uploads")
     return imageurls[x]
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0',port=5000)

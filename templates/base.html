@@ -16,12 +16,18 @@
 <div class="navbar navbar-inverse" role="navigation">
     <div class="container">
         <div class="navbar-header">
-
             <a class="navbar-brand" href="/">CCPS530-Flashie</a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#targ" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+            </button>
         </div>
-        <div class="navbar-collapse collapse">
+        <div class="navbar-collapse collapse" id="targ">
             <ul class="nav navbar-nav mr-auto">
                 <li><a href="/">Home</a></li>
+                <li><a href="{{ url_for('apikey') }}">Add API key</a></li>
                 <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Player Setup<span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="{{ url_for('setupgroup') }}">Setup group</a></li>
