@@ -127,6 +127,7 @@ dmypy.json
 
 #misc
 /static/uploads/*
+!/static/uploads/9dc54d19-8488-4986-b727-d222bda788d8.jpg
 .idea/
 .elasticbeanstalk/
 .vscode/
