@@ -98,7 +98,7 @@ Now that the server is running, you can begin using the tool!
 Using the API Key you've acquired. Please it into the form and click 'submit.'
 *Do not share your API key with anyone*
 
-![s8](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s8.png)
+![s8](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s8.PNG)
 
 
 #### 1. Add/remove a user
