@@ -661,18 +661,20 @@ def _handleUpload(files):
        return None
     filenames = []
     saved_files_urls = []
-    for key, file in files.iteritems():
-        if file and allowed_file(os.path.splitext(file.filename)[1]):
-            extension = os.path.splitext(file.filename)[1]
-            filename = str(uuid.uuid4()) + extension
 
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
+    file = files['files[]']
 
-            filenames.append("%s" % (filepath))
-            im = Image.open(filepath)
-            im.thumbnail(size)
-            im.save("./static/thumbnail/" + filename)
+    if file and allowed_file(os.path.splitext(file.filename)[1]):
+        extension = os.path.splitext(file.filename)[1]
+        filename = str(uuid.uuid4()) + extension
+
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+
+        filenames.append("%s" % (filepath))
+        im = Image.open(filepath)
+        im.thumbnail(size)
+        im.save("./static/thumbnail/" + filename)
 
     return (filenames,filename)
 
