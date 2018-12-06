@@ -1,6 +1,17 @@
+Name: Corey
+Online Demo: http://ccps530flashieprod.herokuapp.com/
+Project Title: Flashie
+Course:  CCPS530
+Instructor: Ghassem Tofighi
+
 # Flashie
 
 Flashie is a tool designed to help provide gameplay insights to League of Legends players. Users can add themselves as well as other players to the tool to better understand their performance. 
+
+See the demo below:
+
+[![Flashie demo](https://img.youtube.com/vi/gjyM-OJ844k/0.jpg)](https://www.youtube.com/watch?v=gjyM-OJ844k)
+
 
 
 
