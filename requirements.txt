@@ -16,6 +16,7 @@ MarkupSafe==1.0
 Pillow==5.3.0
 pycparser==2.19
 pyOpenSSL==18.0.0
+requests==2.18.4
 six==1.11.0
 SQLAlchemy==1.2.12
 visitor==0.1.3
