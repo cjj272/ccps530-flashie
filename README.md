@@ -41,32 +41,7 @@ $ cd ccps530-flashie
 
 You will need to get your own API key from Riot. [Instructions here.](https://developer.riotgames.com/api-keys.html)
 
-
-
-#### 3. Provide a config file
-
-Once you have an API key, create a config.py file and supply it with the following information:
-
-```
-import os
-basedir = os.path.abspath(os.path.dirname(__file__))
-
-
-class Config(object):
-    DEBUG = False
-    TESTING = False
-    CSRF_ENABLED = True
-    SECRET_KEY = '[YOUR SECRET KEY HERE]'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    RIOT_API_KEY = '[YOUR RIOT API KEY HERE]'
-```
-
-Where you will need to supply SECREY_KEY and RIOT_API_KEY with your API key and a long string respectively. 
-
-
-
-#### 4. Set up a virtual environment and install requirements
+#### 3. Set up a virtual environment and install requirements
 
 Next, you will need to create a virtual environment. In a terminal, run:
 
@@ -85,7 +60,7 @@ From there, you can install the requirements:
 
 
 
-#### 5. Create databases
+#### 4. Create databases
 
 Then, you will need to create the databases that Flashie will use. In order to do so, log into the root directory of the project and perform the following:
 
@@ -97,12 +72,12 @@ Then, you will need to create the databases that Flashie will use. In order to d
 
 
 
-#### 6. Run server
+#### 5. Run server
 
 If all went well, you should be able to run the server!
 
 ```
-(venv) cjcj@DESKTOP-RKN5EB9:/mnt/c/Users/cjcjw10/Google Drive/School/ccps530/flaskassign$ flask run
+(venv) $ flask run
  * Tip: There are .env files present. Do "pip install python-dotenv" to use them.
  * Environment: production
    WARNING: Do not use the development server in a production environment.
@@ -117,19 +92,22 @@ If all went well, you should be able to run the server!
 
 Now that the server is running, you can begin using the tool!
 
+#### 0. Setup API Key
 
+Using the API Key you've acquired. Please it into the form and click 'submit.'
+*Do not share your API key with anyone*
 
-#### 1. Add a user
+![s8](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s8.PNG)
+
+#### 1. Add/remove a user
 
 Our first step will be to add League of Legends accounts to the tool. You can do so through the "Add User" page:
-
-
 
 ![s1](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s1.PNG)
 
 Simply add a user and click submit. This will submit an API call to the Riot servers to make sure that the account exists. 
 
-
+To remove a user, use the bottom form.
 
 #### 2. Get match data 
 
@@ -141,8 +119,6 @@ Hit submit for the summoner name you have selected. Another API call will be sen
 
 **NOTE:** Make sure you're grabbing match data for an user who has played recently!
 
-
-
 #### 3. Get game data
 
 *After* you have grabbed match data for a player, you can now navigate to the "Game data" page in order to get player specific info for the relevant matches. 
@@ -153,15 +129,11 @@ Again, simply select the summoner name you are interested in and click submit.
 
 **WARNING: Make sure to check the API request limits for your Riot API Key! Each submission will make up to 20 requests per player!**
 
-
-
 #### 4. (Optional) Upload avatars
 
 If you'd like, you can also upload images to be displayed for each user. After navigating to the "Upload avatars" section, simply drag and drop images and click upload!
 
 ![s4](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s4.png)
-
-
 
 #### 5. (Optional) Set avatars
 
