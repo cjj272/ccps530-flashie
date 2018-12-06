@@ -1,8 +1,8 @@
-Name: Corey
-Online Demo: http://ccps530flashieprod.herokuapp.com/
-Project Title: Flashie
-Course:  CCPS530
-Instructor: Ghassem Tofighi
+*Name: Corey
+*Online Demo: http://ccps530flashieprod.herokuapp.com/
+*Project Title: Flashie
+*Course:  CCPS530
+*Instructor: Ghassem Tofighi
 
 # Flashie
 
