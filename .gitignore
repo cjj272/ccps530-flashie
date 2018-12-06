@@ -129,8 +129,8 @@ dmypy.json
 /static/uploads/*
 /static/thumbnail/*
 
-!/static/uploads/afd1fdbd-4970-49e3-94dd-b9390df0f1a2.jpg
-!/static/thumbnail/afd1fdbd-4970-49e3-94dd-b9390df0f1a2.jpg
+!/static/uploads/ac279016-de7d-4753-97b8-bcf0b8662781.jpg
+!/static/thumbnail/ac279016-de7d-4753-97b8-bcf0b8662781.jpg
 
 .idea/
 .elasticbeanstalk/
