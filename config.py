@@ -9,4 +9,4 @@ class Config(object):
   SECRET_KEY = 'Fn9kmuYCbgodkUoYgsmWKgSg5t7zjQqLyX6f2sHAey4SC2ukfo4Rjw4aJFxGQhL6'
   SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
   SQLALCHEMY_TRACK_MODIFICATIONS = False
-                                
+                

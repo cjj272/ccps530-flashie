@@ -127,11 +127,16 @@ dmypy.json
 
 #misc
 /static/uploads/*
-!/static/uploads/9dc54d19-8488-4986-b727-d222bda788d8.jpg
+/static/thumbnail/*
+
+!/static/uploads/afd1fdbd-4970-49e3-94dd-b9390df0f1a2.jpg
+!/static/thumbnail/afd1fdbd-4970-49e3-94dd-b9390df0f1a2.jpg
+
 .idea/
 .elasticbeanstalk/
 .vscode/
 pytest.py
+*.pyc
 
 # End of https://www.gitignore.io/api/flask
 

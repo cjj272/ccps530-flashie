@@ -14,6 +14,8 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired, Required, Length
 from sqlalchemy import func
 from flask_sqlalchemy import SQLAlchemy
+from PIL import Image
+
 
 
 
@@ -22,13 +24,16 @@ app = Flask(__name__)
 
 
 app.config.from_object('config.Config')
+app.config['UPLOAD_FOLDER'] = './static/uploads'
+app.config['ALLOWED_EXTENSIONS'] = ['png', 'jpg', 'jpeg', 'gif']
+
+
+
 db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 
 app.extensions['bootstrap']['cdns']['jquery'] = WebCDN('//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/')
-
-RIOT_API_KEY = os.environ.get("RIOT_API_KEY")
 
 
 # db stuff
@@ -644,21 +649,94 @@ def interpretlane(input):
 
 
 
-app.config['UPLOAD_FOLDER'] = './static/uploads'
 
 
 @app.route("/imageupload",methods=['GET','POST'])
 def imageupload():
     return render_template('imageupload.html',current_time=datetime.utcnow())
 
-@app.route("/upload",methods=['GET','POST'])
+def _handleUpload(files):
+    size = (80,80)
+    if not files:
+       return None
+    filenames = []
+    saved_files_urls = []
+    for key, file in files.iteritems():
+        if file and allowed_file(os.path.splitext(file.filename)[1]):
+            extension = os.path.splitext(file.filename)[1]
+            filename = str(uuid.uuid4()) + extension
+
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+
+            filenames.append("%s" % (filepath))
+            im = Image.open(filepath)
+            im.thumbnail(size)
+            im.save("./static/thumbnail/" + filename)
+
+    return (filenames,filename)
+
+def allowed_file(String):
+    return True
+
+
+@app.route('/upload', methods=['GET','POST'])
 def upload():
+    if request.method == 'GET':
+        # we are expected to return a list of dicts with infos about the already available files:
+        file_infos = []
+        imageurls = os.listdir("./static/uploads")
+        for file_name in imageurls:
+            #file_url = url_for('download', file_name=file_name)
+            file_url = "{}{}".format("./static/uploads/",file_name)
+            thumbnail_url = "{}{}".format("./static/thumbnail/",file_name)
+            file_size = os.path.getsize("{}{}".format("./static/uploads/",file_name))
+            file_infos.append(dict(name=file_name,
+                                   size=file_size,
+                                   url=file_url,
+                                   thumbnailUrl=thumbnail_url,
+                                   deleteType="DELETE",
+                                   deleteUrl="/delete/" + file_name))
+        return jsonify(files=file_infos)
+
     if request.method == 'POST':
-        file = request.files['file']
-        extension = os.path.splitext(file.filename)[1]
-        f_name = str(uuid.uuid4()) + extension
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], f_name))
-        return json.dumps({'filename':f_name})
+        try:
+            files = request.files
+            file_infos = []
+            uploaded_files,file_name = _handleUpload(files)
+            file_url = uploaded_files
+            thumbnail_url = "{}{}".format("./static/thumbnail/",file_name)
+            file_size = os.path.getsize(uploaded_files[0])
+            file_infos.append(dict(name=file_name,
+                        size=file_size,
+                        url=file_url,
+                        thumbnailUrl=thumbnail_url,
+                        deleteType="DELETE",
+                        deleteUrl="/delete/" + file_name))
+            return jsonify(files=file_infos)
+        except:
+            raise
+            return jsonify({'status': 'error'})
+    
+    return redirect(url_for('imageupload'))
+
+
+@app.route("/delete/<string:filename>", methods=['DELETE'])
+def delete(filename):
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+    if os.path.exists(file_path):
+        try:
+            os.remove(file_path)
+
+            if os.path.exists(file_thumb_path):
+                os.remove(file_thumb_path)
+            
+            return jsonify({filename: 'True'})
+        except:
+            return jsonify({filename: 'False'})
+
+
 
 @app.route("/chooseavatar",methods=['GET','POST'])
 def chooseavatar():
