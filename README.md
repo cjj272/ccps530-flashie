@@ -92,7 +92,6 @@ If all went well, you should be able to run the server!
 
 Now that the server is running, you can begin using the tool!
 
-
 #### 0. Setup API Key
 
 Using the API Key you've acquired. Please it into the form and click 'submit.'
@@ -100,18 +99,15 @@ Using the API Key you've acquired. Please it into the form and click 'submit.'
 
 ![s8](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s8.PNG)
 
-
 #### 1. Add/remove a user
 
 Our first step will be to add League of Legends accounts to the tool. You can do so through the "Add User" page:
-
 
 ![s1](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s1.PNG)
 
 Simply add a user and click submit. This will submit an API call to the Riot servers to make sure that the account exists. 
 
 To remove a user, use the bottom form.
-
 
 #### 2. Get match data 
 
@@ -123,7 +119,6 @@ Hit submit for the summoner name you have selected. Another API call will be sen
 
 **NOTE:** Make sure you're grabbing match data for an user who has played recently!
 
-
 #### 3. Get game data
 
 *After* you have grabbed match data for a player, you can now navigate to the "Game data" page in order to get player specific info for the relevant matches. 
@@ -134,15 +129,11 @@ Again, simply select the summoner name you are interested in and click submit.
 
 **WARNING: Make sure to check the API request limits for your Riot API Key! Each submission will make up to 20 requests per player!**
 
-
-
 #### 4. (Optional) Upload avatars
 
 If you'd like, you can also upload images to be displayed for each user. After navigating to the "Upload avatars" section, simply drag and drop images and click upload!
 
 ![s4](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s4.png)
-
-
 
 #### 5. (Optional) Set avatars
 
