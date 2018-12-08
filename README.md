@@ -23,6 +23,8 @@ Flashie is a tool designed to help provide gameplay insights to League of Legend
 
 [FlaskWTF](http://flask.pocoo.org/docs/1.0/patterns/wtforms/): An integration of WTForms for Flask.
 
+[Pillow] (https://pillow.readthedocs.io/en/5.3.x/): Imaging library - used for thumbnails.
+
 [Riot API](https://developer.riotgames.com/): League of Legends API.
 
 [SQLAlchemy](https://www.sqlalchemy.org/): Python SQL toolkit/ORM.
