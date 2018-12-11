@@ -1,6 +1,19 @@
+## Info
+* Name: Corey
+* Online Demo: http://ccps530flashieprod.herokuapp.com/
+* Project Title: Flashie
+* Course:  CCPS530
+* Instructor: Ghassem Tofighi
+
+
 # Flashie
 
 Flashie is a tool designed to help provide gameplay insights to League of Legends players. Users can add themselves as well as other players to the tool to better understand their performance. 
+
+# See the demo below:
+
+[![Flashie demo](https://img.youtube.com/vi/gjyM-OJ844k/0.jpg)](https://www.youtube.com/watch?v=gjyM-OJ844k)
+
 
 
 
@@ -9,6 +22,8 @@ Flashie is a tool designed to help provide gameplay insights to League of Legend
 [Flask](http://flask.pocoo.org/): A Python microframework that utilizes Werkzeug and Jinja 2. 
 
 [FlaskWTF](http://flask.pocoo.org/docs/1.0/patterns/wtforms/): An integration of WTForms for Flask.
+
+[Pillow](https://pillow.readthedocs.io/en/5.3.x/): Imaging library - used for thumbnails.
 
 [Riot API](https://developer.riotgames.com/): League of Legends API.
 
