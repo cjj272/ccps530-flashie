@@ -254,6 +254,7 @@ def GetRecentMatches(accountID):
         "X-Riot-Token": "{}".format(riotapi),
     })
 
+
     status_dict = {
         400: 'Bad request',
         401: 'Unauthorized',
@@ -337,7 +338,7 @@ def getGameIDs(playerID):
     output = []
     for instance in MatchData.query.filter(MatchData.accountid == playerID):
         output.append(instance.gameId)
-    return sorted(output[:20])
+    return sorted(output,reverse=True)[:20]
 
 
 # forms
@@ -591,12 +592,12 @@ def chart():
         rolepref=interpretrole(rolepref)
 
 
-        kills = GameData.query.with_entities(GameData.gameId,GameData.kills).filter(GameData.accountid == accountid).order_by(GameData.gameId.desc()).limit(20).all()
-        deaths = GameData.query.with_entities(GameData.gameId,GameData.deaths).filter(GameData.accountid == accountid).order_by(GameData.gameId.desc()).limit(20).all()        
+        kills = GameData.query.with_entities(GameData.gameId,GameData.kills).filter(GameData.accountid == accountid).order_by(GameData.gameId.desc()).limit(20).all()[::-1]
+        deaths = GameData.query.with_entities(GameData.gameId,GameData.deaths).filter(GameData.accountid == accountid).order_by(GameData.gameId.desc()).limit(20).all()[::-1]        
         winquery = WinList.query.with_entities(WinList.win).filter(WinList.accountid==accountid).order_by(WinList.gameId.desc()).limit(20).all()
         wins = winquery.count((True,))
         losses = winquery.count((False,))
-        gpm=GameData.query.with_entities(GameData.goldEarned,GameData.gameDuration).filter(GameData.accountid == accountid).order_by(GameData.gameId.desc()).limit(20).all()
+        gpm=GameData.query.with_entities(GameData.goldEarned,GameData.gameDuration).filter(GameData.accountid == accountid).order_by(GameData.gameId.desc()).limit(20).all()[::-1]
         kda=round((GameData.query.with_entities(func.sum(GameData.kills)).filter(GameData.accountid == accountid).scalar()+GameData.query.with_entities(func.sum(GameData.assists)).filter(GameData.accountid == accountid).scalar())/GameData.query.with_entities(func.sum(GameData.deaths)).filter(GameData.accountid == accountid).scalar(),2)
         gpmdata = [round((i/(j/60))) for (i,j) in gpm]
         winpercent = str(round((float(wins)/(wins+losses) * 100),2)) 
