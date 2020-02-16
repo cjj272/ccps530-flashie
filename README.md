@@ -32,11 +32,11 @@ Flashie is a tool designed to help provide gameplay insights to League of Legend
 
 #### 1. Clone the repo
 
-Clone the `ccps530-flashie` repo locally. In a terminal, run:
+Clone the `flashie` repo locally. In a terminal, run:
 
 ```
-$ git clone https://github.com/cjj272/ccps530-flashie.git
-$ cd ccps530-flashie
+$ git clone https://github.com/cjj272/flashie.git
+$ cd flashie
 ```
 
 
@@ -98,20 +98,20 @@ Now that the server is running, you can begin using the tool!
 
 #### 0. Setup API Key
 
-Using the API Key you've acquired. Please it into the form and click 'submit.'
-*Do not share your API key with anyone*
+Input the API Key you've acquired into the form and click 'submit.'
+*Do not share your API key with anyone!!*
 
 ![s8](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s8.PNG)
 
 #### 1. Add/remove a user
 
-Our first step will be to add League of Legends accounts to the tool. You can do so through the "Add User" page:
+Our first step will be to add Riot/League of Legends accounts to the tool. You can do so through the "Add User" page:
 
 ![s1](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s1.PNG)
 
 Simply add a user and click submit. This will submit an API call to the Riot servers to make sure that the account exists. 
 
-To remove a user, use the bottom form.
+To remove a user, use the bottom form on the same page.
 
 #### 2. Get match data 
 
