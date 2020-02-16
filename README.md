@@ -96,12 +96,14 @@ If all went well, you should be able to run the server!
 
 Now that the server is running, you can begin using the tool!
 
-#### 0. Setup API Key
+#### 0. Setup API Key / Secret Key
 
 Input the API Key you've acquired into the form and click 'submit.'
 *Do not share your API key with anyone!!*
 
 ![s8](https://github.com/cjj272/ccps530-flashie/blob/master/gitimages/s8.PNG)
+
+*You will also want to change the SECRET_KEY in config.py, which is in the root directory. This is needed for session security. *
 
 #### 1. Add/remove a user
 
